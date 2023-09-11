@@ -1,10 +1,11 @@
 import { Cocktail, ExtendedIngredientGroup, IngredientGroup } from 'domain/entities/cocktail';
+import { CapacitorHttp } from '@capacitor/core';
 import { DialogController, DialogService } from 'aurelia-dialog';
 import { LocalStorageService } from 'services/local-storage-service';
 import { DrinkCategory, getDrinkCategories } from 'domain/enums/drink-category';
 import { CocktailService } from 'services/cocktail-service';
 import { inject, NewInstance, observable } from 'aurelia-framework';
-import { ValidationRules, ValidationController } from 'aurelia-validation';
+import { ValidationController, ValidationRules } from 'aurelia-validation';
 import Compressor from 'compressorjs';
 import { getUnitsForImperial, getUnitsForMetric, Unit } from 'domain/enums/unit';
 import { MessuarementSystem } from 'domain/enums/messuarement-system';
@@ -16,6 +17,7 @@ import { getTagsFromIds } from 'data/tags-data';
 import { EditTagsDrawer } from './../edit-tags-drawer';
 import { TagModel } from 'domain/entities/cocktail-tag';
 import { CocktailAlcoholInformation } from 'domain/cocktail-alcohol-information';
+
 @inject(
     DialogController,
     LocalStorageService,
@@ -25,8 +27,10 @@ import { CocktailAlcoholInformation } from 'domain/cocktail-alcohol-information'
     DialogService
 )
 export class CocktailDialog {
-    @observable public searchFilter: string;
-    @observable public selectedRating: number = 0;
+    @observable
+    public searchFilter: string;
+    @observable
+    public selectedRating: number = 0;
 
     public cocktail: Cocktail;
     public extendedIngredientGroup: ExtendedIngredientGroup[];
@@ -141,7 +145,11 @@ export class CocktailDialog {
 
     editTags() {
         this._dialogService
-            .open({ viewModel: EditTagsDrawer, model: this.tags.map(x => x.id), lock: false })
+            .open({
+                viewModel: EditTagsDrawer,
+                model: this.tags.map(x => x.id),
+                lock: false
+            })
             .whenClosed(response => {
                 if (response.wasCancelled) {
                     return;
@@ -277,7 +285,11 @@ export class CocktailDialog {
     navigateToCocktailIngredient(event: Event, ingredient: Ingredient) {
         event.stopPropagation();
         const cocktail = this._cocktailService.getCocktailById(ingredient.recipeId);
-        this._dialogService.open({ viewModel: CocktailDialog, model: cocktail, lock: false });
+        this._dialogService.open({
+            viewModel: CocktailDialog,
+            model: cocktail,
+            lock: false
+        });
     }
 
     async createOrUpdateCocktail() {
@@ -334,6 +346,39 @@ export class CocktailDialog {
         this.noteState = 'edit';
     }
 
+    async prepare() {
+        console.log(this.extendedIngredientGroup);
+        const filtered = this.extendedIngredientGroup.filter(x => {
+            const tapValue =
+                typeof x.ingredient.tapNumber === 'string'
+                    ? parseInt(x.ingredient.tapNumber, 10)
+                    : x.ingredient.tapNumber;
+            return !isNaN(tapValue) && tapValue > 0 && x.unit === 'ml';
+        });
+
+        const tmp = filtered.map(x => {
+            return {
+                tap_number: x.ingredient.tapNumber,
+                amount: x.amount,
+                density: x.ingredient.density
+            };
+        });
+
+        this.extendedIngredientGroup.forEach(x => {
+            if (x.ingredient.tapNumber != 0) x.isChecked = true;
+        });
+
+        const settings = this._localStorageService.getCocktailMakerSettings();
+
+        const options = {
+            url: settings.apiUrl + '/prepare/prepare?key=' + settings.key,
+            headers: { 'X-API-Token': settings.token, 'content-type': 'application/json' },
+            data: tmp
+        };
+
+        return await CapacitorHttp.post(options);
+    }
+
     clearNotes() {
         this.cocktail.notes = '';
     }
@@ -342,8 +387,6 @@ export class CocktailDialog {
         if (this.isUserCreatedCocktail) {
             await this._cocktailService.updateCocktail(this.cocktail);
         } else {
-            console.log(this.cocktail.notes);
-            console.log('hej');
             await this._cocktailService.updateCocktailInformation(this.cocktail);
         }
 

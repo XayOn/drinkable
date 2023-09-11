@@ -59,6 +59,7 @@
     "create-ingredient": "Create Ingredient",
     "cancel": "Cancel",
     "save": "Save",
+    "configure": "Link device",
     "welcome": "Welcome",
     "select-messuarement-system": "Select Measurement system",
     "select": "Select",
@@ -137,6 +138,11 @@
     "notes": "Notes",
     "clear": "Clear",
     "add-notes": "Add Notes",
+    "prepare": "Prepare",
+    "cocktail-maker": {
+        "title": "Automatic cocktail maker",
+        "subtitle": "Cocktail maker preferences"
+    },
     "shopping-list": {
         "list": "Shopping Lists",
         "create": "Create Shopping List",

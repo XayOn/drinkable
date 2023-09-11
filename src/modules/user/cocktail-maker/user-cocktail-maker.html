@@ -1,0 +1,35 @@
+<template>
+    <div>
+        <div class="form-container">
+            <form submit.delegate="submitForm()">
+                <div if.bind="!wifis" class="form-group">
+                    <h3 style="text-align: center">Scan the device's QR code and enter the OTP</h3>
+                    <div class="otp-inputs">
+                        <input
+                            repeat.for="input of otpInputs"
+                            type="text"
+                            maxlength="1"
+                            value.bind="input.value"
+                            input.delegate="moveToNextInput($index)" />
+                    </div>
+                    <button
+                        click.delegate="saveSettings()"
+                        style="display: flex; margin: auto"
+                        class="content-center btn bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        <span t="configure"></span>
+                    </button>
+                </div>
+                <div if.bind="wifis">
+                    <h3 style="text-align: center; font-size: 2em" class="content-center font-bold">Settings saved!</h3>
+                    <p class="content-center">
+                        <br />
+                        <br />
+                        Connect to the device's WiFi network (${wifis}) now and finish the setup
+                        <br />
+                        Finally, setup your ingredients, and you're ready to go!
+                    </p>
+                </div>
+            </form>
+        </div>
+    </div>
+</template>

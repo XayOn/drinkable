@@ -5,6 +5,15 @@
                 repeat.for="ingredient of selectedIngredients"
                 class="au-animate animate-fade-in animate-fade-out ingredient-group-item">
                 <p>${ingredient.name}</p>
+                <!-- TODO: Enable only if cocktail maker is enabled-->
+                <div class="au-animate animate-fade-in animate-fade-out ingredient-group-item">
+                <input 
+                    class=tap-number
+                    type="number" 
+                    value.bind=ingredient.tapNumber
+                    input.delegate="setTap(ingredient, $event)"
+                    max-width="2em" 
+                ></input>
                 <svg
                     click.delegate="removeItem(ingredient)"
                     xmlns="http://www.w3.org/2000/svg"
@@ -21,6 +30,7 @@
                         stroke-width="32"
                         d="M368 368L144 144M368 144L144 368" />
                 </svg>
+                </div>
             </div>
         </div>
     </div>

@@ -3,5 +3,10 @@
 	"appName": "Drinkable",
 	"webDir": "dist",
 	"bundledWebRuntime": false,
-	"backgroundColor": "#161212"
+	"backgroundColor": "#161212",
+	"plugins": {
+		"CapacitorHttp": {
+			"enabled": true
+		}
+	}
 }

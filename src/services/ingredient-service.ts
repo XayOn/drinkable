@@ -16,6 +16,8 @@ export class IngredientService {
     constructor(private _localStorageService: LocalStorageService, private _i18n: I18N) {
         this._createdIngredients = this._localStorageService.getIngredients();
 
+        const _configuredTaps = this._localStorageService.getTaps();
+
         const staticIngredients = getStaticIngredients();
         staticIngredients.forEach(element => {
             this._ingredients.push({
@@ -25,7 +27,9 @@ export class IngredientService {
                 translation: element.translation,
                 recipeId: element.recipeId,
                 replacementIds: element.replacementIds,
-                abv: element.abv
+                abv: element.abv,
+                tapNumber: _configuredTaps[element.id] || 0,
+                density: element.density || 1
             });
         });
 
@@ -51,6 +55,7 @@ export class IngredientService {
         const ingredients = this.getIngredients().filter(x => !excludeIds.includes(x.id));
 
         const randomIngredients = ingredients.sort(() => 0.5 - Math.random()).slice(0, count);
+        const _configuredTaps = this._localStorageService.getTaps();
 
         return randomIngredients.map(x => ({
             id: x.id,
@@ -60,7 +65,8 @@ export class IngredientService {
             isActive: false,
             recipeId: x.recipeId,
             abv: x.abv,
-            replacementIds: x.replacementIds
+            replacementIds: x.replacementIds,
+            tapNumber: _configuredTaps[x.id] || 0
         }));
     }
 

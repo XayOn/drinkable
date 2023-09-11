@@ -1,4 +1,5 @@
 import { EventAggregator } from 'aurelia-event-aggregator';
+import { Redirect } from 'aurelia-router';
 import { inject } from 'aurelia-framework';
 import { RouterConfiguration, Router } from 'aurelia-router';
 import { PLATFORM } from 'aurelia-framework';
@@ -19,8 +20,26 @@ export class App {
         private _dialogService: DialogService
     ) {}
 
-    public configureRouter(config: RouterConfiguration, router: Router): void {
+    public async configureRouter(config: RouterConfiguration, router: Router) {
         this.router = router;
+
+        const localStorage = this._localStorageService;
+
+        class isMixologySetup {
+            async run(navigationInstruction, next) {
+                const isLoggedIn = await localStorage.keyExists('cocktail-maker-settings');
+                if (navigationInstruction.getAllInstructions().some(i => i.config.settings.auth)) {
+                    // Initial setup
+                    if (!isLoggedIn) {
+                        return next.cancel(new Redirect('user/cocktail-maker'));
+                    }
+                }
+
+                return next();
+            }
+        }
+
+        config.addAuthorizeStep(isMixologySetup);
 
         config.map([
             { route: '', redirect: 'home-router' },
@@ -31,6 +50,7 @@ export class App {
                 nav: true,
                 title: 'Home',
                 settings: {
+                    auth: true,
                     svg: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><title>Home</title><path d="M80 212v236a16 16 0 0016 16h96V328a24 24 0 0124-24h80a24 24 0 0124 24v136h96a16 16 0 0016-16V212" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/><path d="M480 256L266.89 52c-5-5.28-16.69-5.34-21.78 0L32 256M400 179V64h-48v69" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32"/></svg>'
                 }
             },
@@ -91,8 +111,9 @@ export class App {
             this.handleBackbutton();
         });
 
+        const isLoggedIn = await this._localStorageService.keyExists('cocktail-maker-settings');
         const messuarementSystem = await this._localStorageService.keyExists('messuarement-system');
-        if (!messuarementSystem) {
+        if (!messuarementSystem && isLoggedIn) {
             this._dialogService.open({ viewModel: WelcomeDialog, model: null, lock: true });
         }
     }

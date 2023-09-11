@@ -28,6 +28,13 @@ export class UserPage {
             newBadge: true,
             iconView: './../../components/icons/icon-reader.html',
             route: 'user-shopping-lists'
+        },
+        {
+            title: 'cocktail-maker.title',
+            subtitle: 'cocktail-maker.subtitle',
+            newBadge: true,
+            iconView: './../../components/icons/icon-reader.html',
+            route: 'user-cocktail-maker'
         }
     ];
 

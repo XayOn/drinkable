@@ -6,11 +6,13 @@ export class StaticIngredient {
     public spiritType?: SpiritType;
     public abv?: number;
     public recipeId?: string;
+    public density?: number;
     public replacementIds?: string[];
 }
 
 export class Ingredient extends StaticIngredient {
     public name: string;
+    public tapNumber?: number;
 }
 
 export class ManageIngredientModel extends Ingredient {

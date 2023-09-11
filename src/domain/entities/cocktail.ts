@@ -28,6 +28,8 @@ export class Cocktail extends StaticCocktail {
 }
 
 export class IngredientGroup {
+    tapNumber?: number;
+    density?: number;
     ingredientId: string;
     amount: string;
     unit: Unit | string;
