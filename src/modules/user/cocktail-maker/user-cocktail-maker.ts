@@ -1,20 +1,13 @@
-import { autoinject } from "aurelia-framework";
-import { CocktailMakerService } from "services/cocktail-maker-service";
+import { autoinject } from 'aurelia-framework';
+import { CocktailMakerService } from 'services/cocktail-maker-service';
 
 @autoinject
 export class UserCocktailMakerSettings {
   public settings: { [key: string]: string } = {};
-  public apiUrl: string = "";
-  public apiKey: string = "";
-  public wifis: string = "";
-  public otpInputs = [
-    { value: '' },
-    { value: '' },
-    { value: '' },
-    { value: '' },
-    { value: '' },
-    { value: '' }
-  ];
+  public apiUrl: string = '';
+  public apiKey: string = '';
+  public wifis: string = '';
+  public otpInputs = [{ value: '' }, { value: '' }, { value: '' }, { value: '' }, { value: '' }, { value: '' }];
 
   public moveToNextInput(index: number) {
     if (this.otpInputs[index].value && index < this.otpInputs.length - 1) {
@@ -22,7 +15,7 @@ export class UserCocktailMakerSettings {
       nextInput.focus();
     }
   }
-  
+
   getOtpValue() {
     return this.otpInputs.map(input => input.value).join('');
   }
@@ -39,8 +32,8 @@ export class UserCocktailMakerSettings {
 
   public async saveSettings() {
     let new_settings = await this._cocktailMakerService.setSettings({
-      "apiUrl": "https://mixology-16df7b99e168.herokuapp.com",
-      "code": this.getOtpValue(),
+      apiUrl: process.env.MIXOLOGY_URL ? process.env.MIXOLOGY_URL : 'https://mixology-16df7b99e168.herokuapp.com',
+      code: this.getOtpValue()
     });
     this.wifis = new_settings.wifis;
   }

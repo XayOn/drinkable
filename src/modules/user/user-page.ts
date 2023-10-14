@@ -38,22 +38,31 @@ export class UserPage {
         }
     ];
 
-    public otherListItems: UserListItem[] = [
-        {
-            title: 'user.settings-title',
-            subtitle: 'user.settings-subtitle',
-            iconView: './../../components/icons/icon-settings.html',
-            route: 'settings'
-        },
-        {
-            title: 'user.contact-title',
-            subtitle: 'user.contact-subtitle',
-            iconView: './../../components/icons/icon-mail.html',
-            route: 'contact'
-        }
-    ];
+    public otherListItems: UserListItem[] = process.env.SUPABASE_KEY
+        ? [
+            {
+                title: 'user.settings-title',
+                subtitle: 'user.settings-subtitle',
+                iconView: './../../components/icons/icon-settings.html',
+                route: 'settings'
+            },
+            {
+                title: 'user.contact-title',
+                subtitle: 'user.contact-subtitle',
+                iconView: './../../components/icons/icon-mail.html',
+                route: 'contact'
+            }
+        ]
+        : [
+            {
+                title: 'user.settings-title',
+                subtitle: 'user.settings-subtitle',
+                iconView: './../../components/icons/icon-settings.html',
+                route: 'settings'
+            }
+        ];
 
-    constructor(private _router: Router) {}
+    constructor(private _router: Router) { }
 
     navigateToRoute(route: string) {
         this._router.navigateToRoute(route);
