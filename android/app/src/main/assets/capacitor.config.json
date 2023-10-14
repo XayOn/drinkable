@@ -1,6 +1,6 @@
 {
-	"appId": "com.moimob.drinkable",
-	"appName": "Drinkable",
+	"appId": "com.xayon.mixology",
+	"appName": "Mixology",
 	"webDir": "dist",
 	"bundledWebRuntime": false,
 	"backgroundColor": "#161212",

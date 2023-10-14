@@ -1,4 +1,4 @@
-package com.moimob.drinkable;
+package com.xayon.drinkable;
 
 import android.os.Bundle;
 import android.webkit.WebView;
