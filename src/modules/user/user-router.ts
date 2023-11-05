@@ -42,13 +42,6 @@ export class UserRouter {
                 title: 'shopping-list.title'
             },
             {
-                route: ['cocktail-maker'],
-                name: 'user-cocktail-maker',
-                moduleId: PLATFORM.moduleName('modules/user/cocktail-maker/user-cocktail-maker'),
-                nav: false,
-                title: 'cocktail-maker.title'
-            },
-            {
                 route: ['settings'],
                 name: 'settings',
                 moduleId: PLATFORM.moduleName('modules/user/settings/settings'),

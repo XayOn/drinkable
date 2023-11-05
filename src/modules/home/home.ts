@@ -1,21 +1,44 @@
 import { inject } from 'aurelia-framework';
+import { CocktailMakerService } from 'services/cocktail-maker-service';
 import { LocalStorageService } from 'services/local-storage-service';
 import { WidgetOrder } from 'domain/entities/widget-order';
 import { Widget } from 'domain/enums/widget';
 import Snowflakes from 'magic-snowflakes';
 
-@inject(LocalStorageService)
+@inject(LocalStorageService, CocktailMakerService)
 export class Home {
     public containerElement: HTMLElement;
     public snowflakes: Snowflakes;
     public ingredientIds: string[] = [];
     public widgetOrder: WidgetOrder[] = [];
 
-    constructor(private _localStorageService: LocalStorageService) {}
+    constructor(
+        private _localStorageService: LocalStorageService,
+        private _cocktailMakerService: CocktailMakerService
+    ) {}
 
-    activate() {
+    public async setupMixologyDevice() {
+        try {
+            const currentUrl = window.location.href;
+            const standardUrl = currentUrl.replace('com.xayon.drinkable://', 'http://localhost/');
+            const url = new URL(standardUrl);
+            const searchParams = url.searchParams;
+            const code = searchParams.get('custom_qr');
+            await this._cocktailMakerService.setSettings({
+                apiUrl: process.env.MIXOLOGY_URL
+                    ? process.env.MIXOLOGY_URL
+                    : 'https://mixology-16df7b99e168.herokuapp.com',
+                code: code
+            });
+        } catch (e) {
+            console.log(e);
+        }
+    }
+
+    async activate() {
         this.ingredientIds = this._localStorageService.getIngredientIds();
         this.widgetOrder = this._localStorageService.getWidgetOrder();
+        this.setupMixologyDevice();
     }
 
     attached() {
