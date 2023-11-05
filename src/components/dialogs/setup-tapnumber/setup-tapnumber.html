@@ -1,0 +1,14 @@
+<template>
+    <div class="tap-selector">
+        <div
+            click.delegate="selectTap(0)"
+            class="color-square disabled"
+            class.bind="selectedTap === 0 ? 'selected' : ''"></div>
+        <template repeat.for="color of colors">
+            <div
+                click.delegate="selectTap(color.value)"
+                class="color-square ${color.name}"
+                class.bind="selectedTap === color.value ? 'selected' : ''"></div>
+        </template>
+    </div>
+</template>

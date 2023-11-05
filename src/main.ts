@@ -1,4 +1,5 @@
 import { DialogConfiguration } from 'aurelia-dialog';
+import '@fortawesome/fontawesome-free/css/all.css';
 import { Aurelia } from 'aurelia-framework';
 import { PLATFORM } from 'aurelia-pal';
 import './main.scss';
