@@ -32,6 +32,7 @@ export class CocktailDialog {
     @observable
     public selectedRating: number = 0;
 
+    public isMixologySetup: boolean = false;
     public cocktail: Cocktail;
     public extendedIngredientGroup: ExtendedIngredientGroup[];
     public controller: DialogController;
@@ -67,6 +68,8 @@ export class CocktailDialog {
         private _ingredientService: IngredientService,
         private _dialogService: DialogService
     ) {
+        const conf = this._localStorageService.getCocktailMakerSettings();
+        this.isMixologySetup = conf && conf.apiUrl && conf.key && conf.token ? true : false;
         this.controller = dialogContoller;
         this.handleInputBlur = () => {
             this.displayAddIngredients = false;

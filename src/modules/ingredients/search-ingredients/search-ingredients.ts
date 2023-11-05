@@ -36,7 +36,7 @@ export class SearchIngredients {
         private _dialogService: DialogService
     ) {
         const conf = this._localStorageService.getCocktailMakerSettings();
-        this.isMixologySetup = conf && conf.apiUrl && conf.apiKey && conf.apiToken ? true : false;
+        this.isMixologySetup = conf && conf.apiUrl && conf.key && conf.token ? true : false;
         console.log(conf);
         console.log(this.isMixologySetup);
     }

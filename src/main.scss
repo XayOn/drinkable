@@ -541,3 +541,196 @@ body {
 .btm-nav > :where(.active) {
     @apply bg-base-300;
 }
+
+.prepare-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 12px 24px;
+    font-size: 16px;
+    font-weight: 500;
+    color: white;
+    background-color: #4caf50; /* A green shade */
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24), 0px 4px 5px rgba(0, 0, 0, 0.19);
+    transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.prepare-button:hover,
+.prepare-button:focus {
+    background-color: #66bb6a; /* A lighter green shade */
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.24), 0px 8px 10px rgba(0, 0, 0, 0.19);
+}
+
+.prepare-button:active {
+    background-color: #388e3c; /* A darker green shade for click effect */
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.24);
+}
+
+.prepare-button i {
+    margin-right: 8px;
+}
+
+.prepare-button .fa-shaker {
+    font-size: 20px; /* Slightly larger icon for emphasis */
+}
+
+.add-notes {
+    display: flex;
+    margin-top: 20px;
+}
+
+/* Wrapper style */
+.selector-wrapper {
+    position: relative; /* Allows absolute positioning inside */
+    display: inline-block; /* Fit to content */
+}
+
+/* Numeric Selector for Number of Cocktails - Dark Theme */
+.number-of-cocktails-selector {
+    font-size: 1rem; /* Adjust size as needed */
+    border: 1px solid #555; /* Darker border for visibility on dark backgrounds */
+    border-radius: 4px; /* Slightly rounded corners for a modern look */
+    background-color: #222; /* Dark background */
+    color: #ddd; /* Light text color for contrast */
+    appearance: none; /* Remove default system dropdown arrow */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    padding: 12px;
+    cursor: pointer; /* Cursor indicates this is a dropdown */
+    width: 100%; /* Make the select fill its container */
+}
+
+/* Custom arrow */
+.selector-wrapper::after {
+    content: '\25BC'; /* Unicode for downward arrow */
+    color: #ddd; /* Light arrow color for contrast */
+    position: absolute; /* Position it on the right */
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    pointer-events: none; /* Prevents clicking on the arrow */
+}
+
+/* Change border color on hover */
+.number-of-cocktails-selector:hover {
+    border-color: #aaa;
+}
+
+/* Change border color when the selector is focused */
+.number-of-cocktails-selector:focus {
+    border-color: #fff;
+    outline: none; /* Remove default outline */
+}
+
+/* Style for the options */
+.number-of-cocktails-selector option {
+    background: #333; /* Darker background for options */
+    color: #fff; /* Light color for the options' text */
+}
+
+.ingredient-item {
+    border-bottom: 1px solid #444; /* Adjust the color to match your dark theme */
+    padding: 0.5rem 0;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.ingredient-item:hover {
+    background-color: #333; /* Slightly lighter than the background for hover effect */
+}
+
+@keyframes strikeThrough {
+    0% {
+        color: initial; /* Or your original text color */
+        text-decoration-color: transparent;
+    }
+    100% {
+        color: #808080; /* Or the color you want after text is checked */
+        text-decoration-color: inherit; /* Or specify a color */
+    }
+}
+
+.ingredient-checked {
+    opacity: 0.5;
+    -webkit-text-decoration: line-through;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px; /* Adjust thickness as needed */
+    text-decoration-color: transparent; /* Start with a transparent line */
+    animation: strikeThrough 0.5s forwards; /* Adjust time as needed */
+}
+
+@keyframes strikeThrough {
+    from {
+        text-decoration-color: transparent;
+    }
+    to {
+        text-decoration-color: inherit; /* Or specify a color */
+    }
+}
+
+.ingredient-checked {
+    opacity: 0.5;
+    -webkit-text-decoration: line-through;
+    text-decoration: line-through;
+    text-decoration-thickness: 2px; /* Adjust thickness as needed */
+    text-decoration-color: transparent; /* Start with a transparent line */
+    animation: strikeThrough 0.5s forwards; /* Adjust time as needed */
+}
+
+.ingredient-name {
+    font-weight: bold;
+    margin: 0;
+}
+
+.ingredient-substitutes {
+    font-size: 0.85rem;
+    color: #aaa; /* Lighter text for a dark theme */
+    margin-top: 0.25rem;
+}
+
+.ingredient-amount {
+    color: #ddd; /* Light text for a dark theme */
+}
+
+.ingredient-details {
+    align-items: center;
+}
+
+.ingredient-placeholder {
+    width: 1.5em;
+}
+
+/* If the last item shouldn't have a bottom border */
+.ingredient-item:last-child {
+    border-bottom: none !important;
+}
+
+.instructions-title,
+.ingredients-title {
+    font-size: 1.5em; /* Larger font size for the title */
+    font-weight: bold; /* Bold font weight for emphasis */
+    margin-top: 2rem; /* More space above the title */
+    width: 100%; /* Full width to break the pattern */
+    text-align: center; /* Centered text */
+    padding: 0.5rem; /* Padding for better spacing */
+    background-color: #2a2a2a; /* Background color for dark theme contrast, adjust as necessary */
+    color: #ffffff; /* Font color for dark theme, adjust as necessary */
+    border-radius: 5px; /* Optional: rounded corners for the background */
+}
+
+.instructions-content {
+    font-size: 1.2rem;
+    margin-top: 1rem; /* Space between title and content */
+    padding: 1rem; /* Padding around the content */
+    background-color: #333333; /* Slightly different background color, adjust as necessary */
+    color: #ffffff; /* Font color for dark theme, adjust as necessary */
+    border-left: 4px solid #4caf50; /* A colored accent line on the left */
+}
+
+.cocktail-img:hover {
+    transform: scale(1.05);
+    transition: transform 0.3s ease;
+}

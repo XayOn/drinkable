@@ -112,7 +112,17 @@
                         stroke-width="32"
                         d="M368 368L144 144M368 144L144 368" />
                 </svg>
-                <img src.bind="cocktail.imageSrc" loading="lazy" />
+                <img
+                    src.bind="cocktail.imageSrc"
+                    class="cocktail-img image-overlay"
+                    style="
+                        margin-top: 30px;
+                        margin-bottom: 30px;
+                        border: 2px solid #555; /* Adjust color to match your theme */
+                        box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+                        border-radius: 8px; /* Rounded corners */
+                    "
+                    loading="lazy" />
             </div>
 
             <section>
@@ -163,71 +173,36 @@
 
             <div class="divider"></div>
 
-            <div if.bind="!isEditMode" class="mx-4">
-                <div if.bind="noteState === 'none'">
-                    <button click.delegate="editNotes()" class="btn btn-xs" data-cy="add-notes">
-                        <icon-add class="h-4 w-4"></icon-add>
-                        <span t="add-notes"></span>
+            <section class="flex justify-space-around" style="justify-content: space-around">
+                <div if.bind="isMixologySetup" if.bind="!isEditMode" class="mx-6" class="selector-wrapper">
+                    <button click.delegate="prepare()" class="prepare-button">
+                        <i class="fas fa-cocktail fa-shaker"></i>
+                        Prepare
                     </button>
                 </div>
-                <button click.delegate="prepare()" class="btn btn-xs" data-cy="prepare">
-                    <icon-add class="h-4 w-4"></icon-add>
-                    <span t="prepare"></span>
-                </button>
-                <div else class="alert" data-cy="notes-container">
-                    <div class="flex justify-between items-center w-full">
-                        <p class="text-sm font-semibold" t="notes"></p>
-                        <button
-                            if.bind="noteState !== 'edit'"
-                            click.delegate="editNotes()"
-                            class="btn btn-sm btn-circle">
-                            <icon-pencil class="w-5 h-5"></icon-pencil>
-                        </button>
-                    </div>
 
-                    <div if.bind="noteState === 'exists'" class="w-full">
-                        <p class="w-full text-left whitespace-pre-wrap">${cocktail.notes}</p>
-                    </div>
-                    <div if.bind="noteState === 'edit'" class="w-full">
-                        <textarea
-                            value.bind="cocktail.notes"
-                            class="textarea textarea-ghost textarea-bordered w-full"
-                            data-cy="notes-textarea"></textarea>
-                        <div class="mt-2 flex justify-between flex-row-reverse">
-                            <button
-                                click.delegate="saveNotes()"
-                                class="btn btn-sm btn-success"
-                                t="save"
-                                data-cy="save-notes"></button>
-                            <button
-                                click.delegate="clearNotes()"
-                                show.bind="cocktail.notes.length > 0"
-                                class="btn btn-sm btn-outline"
-                                t="clear"
-                                data-cy="clear-notes"></button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <section>
-                <div if.bind="!isEditMode" class="multiplier-select">
-                    <select value.bind="multiplier" class="select select-ghost w-full select-sm">
-                        <option repeat.for="i of 10" model.bind="i + 1">${i + 1}</option>
+                <div if.bind="!isEditMode">
+                    <select value.bind="multiplier" class="number-of-cocktails-selector">
+                        <option repeat.for="i of 10" model.bind="i + 1">${i + 1} cocktails</option>
                     </select>
                 </div>
+            </section>
 
+            <section>
                 <div class="${isEditMode ? 'edit-mode' : ''} ingredient-list mt-4">
                     <div if.bind="isEditMode" class="flex py-0 justify-between ml-1" style="margin-right: 4.5rem">
                         <h6 class="text-sm" t="ingredient"></h6>
                         <h6 class="text-sm" t="amount"></h6>
                         <h6 class="text-sm" t="unit"></h6>
                     </div>
+                    <h5 class="ingredients-title">Ingredients</h5>
                     <div
                         repeat.for="ingredientGroup of extendedIngredientGroup"
-                        click.delegate="checkIngredient(ingredientGroup)">
-                        <div if.bind="!isEditMode" class="${ingredientGroup.isChecked ? 'opacity-50' : ''}">
-                            <h5>
+                        click.delegate="checkIngredient(ingredientGroup)"
+                        class="ingredient-item">
+                        <div if.bind="!isEditMode" class="${ingredientGroup.isChecked ? 'ingredient-checked' : ''}">
+                            <!-- Ingredient name with link or plain text -->
+                            <h5 class="ingredient-name">
                                 <span
                                     if.bind="ingredientGroup.ingredient.recipeId"
                                     click.delegate="navigateToCocktailIngredient($event, ingredientGroup.ingredient)">
@@ -236,32 +211,25 @@
                                 <span else>${ingredientGroup.ingredient.name}</span>
                             </h5>
 
-                            <h6 if.bind="ingredientGroup.substituteNames" class="text-sm opacity-75">
-                                <span>(</span><span t="or"></span>
-                                <span>${ingredientGroup.substituteNames})</span>
+                            <!-- Substitutes, if any -->
+                            <h6 if.bind="ingredientGroup.substituteNames" class="ingredient-substitutes">
+                                <span>(</span><span t="or"></span><span>${ingredientGroup.substituteNames})</span>
                             </h6>
                         </div>
 
-                        <div if.bind="!isEditMode" class="flex self-center">
-                            <p class="${ingredientGroup.isChecked ? 'opacity-50' : ''}">
+                        <div if.bind="!isEditMode" class="flex justify-between ingredient-details">
+                            <p class="ingredient-amount">
                                 ${ingredientGroup.amount | amountFormat:multiplier:ingredientGroup.unit}
                             </p>
-                            <svg
-                                if.bind="ingredientGroup.isInStorage"
-                                xmlns="http://www.w3.org/2000/svg"
-                                class="w-6 h-6 text-success"
-                                stroke="currentColor"
-                                viewBox="0 0 512 512">
-                                <title>Checkmark</title>
-                                <path
-                                    fill="none"
-                                    stroke="currentColor"
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    stroke-width="32"
-                                    d="M416 128L192 384l-96-96" />
-                            </svg>
-                            <div else style="width: 1.5em"></div>
+                            <div class="flex items-center">
+                                <i
+                                    if.bind="ingredientGroup.tapNumber && ingredientGroup.tapNumber > 0"
+                                    class="fas fa-tap fa-lg text-info"></i>
+                                <i
+                                    if.bind="ingredientGroup.isInStorage && (!ingredientGroup.tapNumber || ingredientGroup.tapNumber <= 0)"
+                                    class="fas fa-check-circle fa-lg text-success"></i>
+                                <div else class="ingredient-placeholder"></div>
+                            </div>
                         </div>
                         <div else style="display: flex; width: 100%">
                             <input
@@ -297,7 +265,6 @@
                                     d="M368 368L144 144M368 144L144 368" />
                             </svg>
                         </div>
-                        <div if.bind="ingredientGroup.isChecked" class="line-through-div bg-secondary"></div>
                     </div>
                 </div>
                 <div if.bind="isEditMode">
@@ -320,8 +287,8 @@
             </section>
 
             <section>
-                <h5 class="font-bold mb-2" t="instructions"></h5>
-                <div if.bind="!isEditMode">
+                <h5 class="font-bold mb-2 instructions-title" t="instructions"></h5>
+                <div if.bind="!isEditMode" class="instructions-content">
                     <p if.bind="cocktail.instructions" class="whitespace-pre-wrap">${cocktail.instructions}</p>
                     <p class="whitespace-pre-wrap" else t="instructions:${cocktail.translation}"></p>
                 </div>
@@ -331,6 +298,50 @@
                     class="textarea textarea-bordered p-1 w-full"
                     value.bind="cocktail.instructions"
                     data-cy="textarea"></textarea>
+
+                <div if.bind="!isEditMode" class="add-notes">
+                    <div if.bind="noteState === 'none'" style="margin-left: auto; margin-right: auto">
+                        <button click.delegate="editNotes()" class="btn btn-xs" data-cy="add-notes">
+                            <icon-add class="h-4 w-4"></icon-add>
+                            <span t="add-notes"></span>
+                        </button>
+                    </div>
+
+                    <div else class="alert" data-cy="notes-container">
+                        <div class="flex justify-between items-center w-full">
+                            <p class="text-sm font-semibold" t="notes"></p>
+                            <button
+                                if.bind="noteState !== 'edit'"
+                                click.delegate="editNotes()"
+                                class="btn btn-sm btn-circle">
+                                <icon-pencil class="w-5 h-5"></icon-pencil>
+                            </button>
+                        </div>
+
+                        <div if.bind="noteState === 'exists'" class="w-full">
+                            <p class="w-full text-left whitespace-pre-wrap">${cocktail.notes}</p>
+                        </div>
+                        <div if.bind="noteState === 'edit'" class="w-full">
+                            <textarea
+                                value.bind="cocktail.notes"
+                                class="textarea textarea-ghost textarea-bordered w-full"
+                                data-cy="notes-textarea"></textarea>
+                            <div class="mt-2 flex justify-between flex-row-reverse">
+                                <button
+                                    click.delegate="saveNotes()"
+                                    class="btn btn-sm btn-success"
+                                    t="save"
+                                    data-cy="save-notes"></button>
+                                <button
+                                    click.delegate="clearNotes()"
+                                    show.bind="cocktail.notes.length > 0"
+                                    class="btn btn-sm btn-outline"
+                                    t="clear"
+                                    data-cy="clear-notes"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </section>
 
             <div class="divider"></div>
