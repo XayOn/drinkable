@@ -5,6 +5,12 @@ import { WidgetOrder } from 'domain/entities/widget-order';
 import { Widget } from 'domain/enums/widget';
 import Snowflakes from 'magic-snowflakes';
 
+declare global {
+    interface Window {
+        setupMixologyDevice?: () => void;
+    }
+}
+
 @inject(LocalStorageService, CocktailMakerService)
 export class Home {
     public containerElement: HTMLElement;
@@ -15,20 +21,22 @@ export class Home {
     constructor(
         private _localStorageService: LocalStorageService,
         private _cocktailMakerService: CocktailMakerService
-    ) {}
+    ) { }
 
-    public async setupMixologyDevice() {
-        try {
+    public async setupMixologyDevice(qr_code: String | undefined) {
+        if (!qr_code) {
             const currentUrl = window.location.href;
             const standardUrl = currentUrl.replace('com.xayon.drinkable://', 'http://localhost/');
             const url = new URL(standardUrl);
             const searchParams = url.searchParams;
-            const code = searchParams.get('custom_qr');
+            qr_code = searchParams.get('custom_qr');
+        }
+        try {
             await this._cocktailMakerService.setSettings({
                 apiUrl: process.env.MIXOLOGY_URL
                     ? process.env.MIXOLOGY_URL
                     : 'https://mixology-16df7b99e168.herokuapp.com',
-                code: code
+                code: qr_code
             });
         } catch (e) {
             console.log(e);
@@ -38,10 +46,11 @@ export class Home {
     async activate() {
         this.ingredientIds = this._localStorageService.getIngredientIds();
         this.widgetOrder = this._localStorageService.getWidgetOrder();
-        this.setupMixologyDevice();
     }
 
     attached() {
+        // Directly export this method so we can let android handle it.
+        window.setupMixologyDevice = this.setupMixologyDevice.bind(this);
         this.setupSnowflakes();
     }
 
