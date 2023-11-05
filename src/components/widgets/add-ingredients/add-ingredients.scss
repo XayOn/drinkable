@@ -124,6 +124,28 @@ add-ingredients {
         flex-direction: row;
         align-items: center;
     }
+    .internal-taps {
+        max-width: 50%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+}
+.internal-taps {
+    display: flex;
+    justify-content: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw;
+    height: 88vh;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.8);
+    z-index: 1000;
 }
 
 .ingredient-content {
@@ -154,4 +176,31 @@ add-ingredients {
     justify-content: space-around;
     padding: 10px;
     background-color: #222; /* Dark background for the dialog */
+}
+
+.tap-selector {
+    position: fixed; /* Fixed position to cover the entire screen */
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100vw; /* Full width of the viewport */
+    height: 88vh; /* Full height of the viewport */
+    display: flex; /* Use flexbox for centering the content */
+    flex-wrap: wrap; /* Allow colors to wrap as needed */
+    align-items: center; /* Center items vertically */
+    justify-content: center; /* Center items horizontally */
+    background-color: rgba(0, 0, 0, 0.8); /* Semi-transparent background */
+    z-index: 1000; /* Ensure it's above other content */
+
+    .color-square {
+        margin: 10px; /* Space out the squares */
+        width: 40%; /* Width of the color squares */
+        height: 50px; /* Height of the color squares */
+        border: 3px solid #bdbdbd;
+        padding: 8px 16px;
+        margin: 4px;
+        border-radius: 4px;
+        transition: background-color 0.3s;
+    }
 }
