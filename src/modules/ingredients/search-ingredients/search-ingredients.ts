@@ -16,6 +16,7 @@ export class SearchIngredients {
 
     // TODO: Fix this type
     private _configuredTaps: { [key: number]: number } = [];
+    public isMixologySetup: boolean = false;
 
     public colors = {
         0: 'disabled',
@@ -33,7 +34,12 @@ export class SearchIngredients {
         private _localStorageService: LocalStorageService,
         private _ingredientService: IngredientService,
         private _dialogService: DialogService
-    ) {}
+    ) {
+        const conf = this._localStorageService.getCocktailMakerSettings();
+        this.isMixologySetup = conf && conf.apiUrl && conf.apiKey && conf.apiToken ? true : false;
+        console.log(conf);
+        console.log(this.isMixologySetup);
+    }
 
     openTapNumberDialog(ingredient: Ingredient) {
         this._dialogService

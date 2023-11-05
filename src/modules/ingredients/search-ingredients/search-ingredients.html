@@ -8,6 +8,7 @@
                 <div class="ingredient-content">
                     <p class="ingredient-name">${ingredient.name}</p>
                     <button
+                        if.bind="isMixologySetup"
                         click.delegate="openTapNumberDialog(ingredient)"
                         class="color-square tap-color-button ${ingredient.tapNumber ? colors[ingredient.tapNumber] : 'disabled'}"></button>
 
